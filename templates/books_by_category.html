@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ category }} Books - SRIT Library</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            border: 2px solid #6f42c1;
+            border-radius: 12px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 20px rgba(111, 66, 193, 0.3);
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .card-body {
+            background-color: #6f42c1;
+            color: white;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .card-text {
+            font-size: 0.9rem;
+        }
+
+        .btn-request {
+            background-color: white;
+            color: #6f42c1;
+            border: 1px solid #6f42c1;
+        }
+
+        .btn-request:hover {
+            background-color: #6f42c1;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+   {% include 'navbar.html' %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Books in {{ category }} Category</h2>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ messages[0] }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% if books %}
+    <form method="POST">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            {% for book in books %}
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0 bg-light" style="border-radius: 12px;">
+                    <img src="{{ url_for('static', filename='images/books/' ~ book.image) }}" 
+                         class="card-img-top" 
+                         alt="{{ book.title }}" 
+                         style="height: 200px; object-fit: cover; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <p class="card-text text-muted">by {{ book.author }}</p>
+                        <button type="submit" 
+                                name="book_title" 
+                                value="{{ book.title }}" 
+                                class="btn mt-auto text-dark"
+                                style="background-color: #f5f5dc;">Request</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </form>
+    {% else %}
+        <p>No books found in this category.</p>
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+</html>
